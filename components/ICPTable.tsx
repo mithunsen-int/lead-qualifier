@@ -37,7 +37,7 @@ export default function ICPTable() {
   const [editingCategoryTitle, setEditingCategoryTitle] = useState<string>("");
   const [editingCategoryDefinition, setEditingCategoryDefinition] =
     useState<string>("");
-  
+
   // Bulk operations
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [bulkEditValues, setBulkEditValues] = useState({
@@ -498,9 +498,7 @@ export default function ICPTable() {
               <th className="px-4 py-2 w-10">
                 <input
                   type="checkbox"
-                  checked={
-                    selectedRows.size === rows.length && rows.length > 0
-                  }
+                  checked={selectedRows.size === rows.length && rows.length > 0}
                   onChange={toggleSelectAll}
                   className="w-4 h-4"
                 />
