@@ -1,12 +1,21 @@
 "use client";
 
-import { BarChart3, CheckCircle, Menu, Users, X, XCircle } from "lucide-react";
+import {
+  BarChart3,
+  CheckCircle,
+  Layers,
+  Menu,
+  Users,
+  X,
+  XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: BarChart3 },
+  { href: "/icp", label: "ICP", icon: Layers },
   { href: "/leads", label: "All Leads", icon: Users },
   { href: "/leads/qualified", label: "Qualified", icon: CheckCircle },
   { href: "/leads/disqualified", label: "Disqualified", icon: XCircle },

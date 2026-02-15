@@ -3,36 +3,41 @@ import { Lead } from "@/types/lead";
 export function exportLeadsAsCSV(leads: Lead[], filename = "leads.csv"): void {
   const headers = [
     "Lead ID",
-    "Client Name",
-    "Business",
+    "Lead Name",
+    "Lead Email",
+    "Company",
     "Industry",
     "Location",
-    "Budget (USD)",
-    "BANT Score",
+    "Monthly Budget",
     "Budget Score",
     "Authority Score",
     "Need Score",
-    "Timing Score",
-    "Verdict",
+    "Timeline Score",
+    "Status",
     "Reason",
     "Created At",
   ];
 
   const rows = leads.map((lead) => [
-    lead.id,
-    lead.clientName,
-    lead.business,
-    lead.industry,
-    lead.location,
-    lead.budget,
-    lead.bantScore,
+    lead._id || "",
+    lead.leadInfo?.leadName || "",
+    lead.leadInfo?.leadEmail || "",
+    lead.leadInfo?.companyName || "",
+    lead.leadInfo?.leadIndustry || "",
+    lead.leadInfo?.location || "",
+    lead.leadInfo?.monthlyBudget || "",
     lead.budgetScore,
     lead.authorityScore,
     lead.needScore,
-    lead.timingScore,
-    lead.verdict,
-    lead.reason,
-    lead.createdAt,
+    lead.timelineScore,
+    lead.status ||
+      lead.finalStatus ||
+      (lead.isQualified ? "Qualified" : "Disqualified"),
+    lead.qualificationReason ||
+      lead.disQualificationReason ||
+      lead.overallAssessment ||
+      "",
+    lead.createdAt || "",
   ]);
 
   // Convert to CSV format
