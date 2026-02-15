@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "data": [
+    {
+      "budgetScore": 4,
+      "budgetEvidence": "Original Budget: INR 5-10 lacs; Converted USD: approx 6,000 - 12,000; Company size: 1-10 employees; Industry: IT Services (SME).",
+      "authorityScore": 2,
+      "authorityEvidence": "Lead's role: Marketing Manager; ICP decision-makers: CTO, VP Engineering, Head of Engineering.",
+      "needScore": 8,
+      "needEvidence": "Engagement Intent: Outsourcing / Staff Augmentation / Product Build; Internal engineering team = 0; Budget exists; Timeline 2-4 months indicates urgency.",
+      "timelineScore": 8,
+      "timelineEvidence": "Timeline: 2-4 Months; Client looking to start/deliver within 2-4 months.",
+      "overallAssessment": "Qualified with caveats: clear need and urgency; authority and firmographic alignment weaker.",
+      "qualificationReason": "Strong need and timely engagement with external resources; modest budget; however decision-maker risk and very small company size reduce ICP alignment.",
+      "disQualificationReason": "No senior decision-maker identified; company headcount 1-10; budgeted in INR; ICP targets 20-1000 employees; US/India mixed location complicates currency and procurement; potential misalignment with ICP.",
+      "recommendedAction": "Qualify further with a stakeholder who has purchasing authority; attempt to reach CTO/VP Eng; propose a low-risk pilot or proof-of-concept; prepare budget-friendly engagement options and offshore/nearshore models; schedule discovery call to map decision flow.",
+      "finalStatus": "⚠️ Low Priority Lead",
+      "status": "Low Priority Lead",
+      "leadScore": 5.5,
+      "isQualified": true,
+      "leadInfo": {
+        "leadName": "Poorwal Oak",
+        "leadPhone": "+1 516 263 6555",
+        "companyName": "Jyoti World",
+        "jobTitle": "Marketing Manager",
+        "leadEmail": "joe.costello@castleinteract.com",
+        "companyWebsite": "castleinteract.com",
+        "leadIndustry": "IT Services (SME)",
+        "coSize": "1-10",
+        "techTeamSize": "0",
+        "revenue": "0",
+        "location": "Mumbai | New York City, New York, United States",
+        "businessModel": "",
+        "monthlyBudget": "5 - 10 lacs",
+        "techStack": [
+          "google-cloud-cdn",
+          "google-cloud-platform",
+          "hsts",
+          "http-3",
+          "lodash",
+          "react-js",
+          "wix"
+        ],
+        "opportunity_type": "ECNB",
+        "timeline": "2 - 4 Months",
+        "leadData": {
+          "success_criteria": [
+            "Build one central lead intelligence system that:",
+            "Collects leads from all sources",
+            "Extracts important details automatically",
+            "Fills gaps by asking follow-ups (not guessing)",
+            "Removes duplicates",
+            "Scores how good the lead is",
+            "Sends only Sales-ready leads to CRM",
+            "So Sales gets complete, structured, high-quality leads, not raw enquiries."
+          ],
+          "lead_type": "Outbound",
+          "primary_need": "Data Engg & AIA",
+          "proposed_solution": "Automated Lead Management System"
+        },
+        "receiverEmail": "mithun.sen@intglobal.com",
+        "receiverName": "Mithun Sen"
+      }
+    }
+  ]
+}

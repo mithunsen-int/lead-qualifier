@@ -1,65 +1,128 @@
-import Image from "next/image";
+import BudgetChart from "@/components/BudgetChart";
+import IndustryChart from "@/components/IndustryChart";
+import KPIStatCard from "@/components/KPIStatCard";
+import TimeSeriesChart from "@/components/TimeSeriesChart";
+import VerdictChart from "@/components/VerdictChart";
+import { calculateAnalyticsData } from "@/lib/analytics";
+import { Lead } from "@/types/lead";
+import { CheckCircle, TrendingUp, Users, XCircle } from "lucide-react";
 
-export default function Home() {
+async function fetchLeadsFromMongoDB(): Promise<Lead[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const response = await fetch(`${baseUrl}/api/leads`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch leads from MongoDB");
+    }
+
+    const data = await response.json();
+    return data.leads || [];
+  } catch (error) {
+    console.error("Error fetching leads:", error);
+    return [];
+  }
+}
+
+export default async function DashboardPage() {
+  let leads: Lead[] = [];
+  let error = null;
+
+  try {
+    leads = await fetchLeadsFromMongoDB();
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to load dashboard";
+    console.error("Dashboard error:", err);
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+        <p className="text-red-800">
+          <strong>Error:</strong> {error}
+        </p>
+      </div>
+    );
+  }
+
+  if (!leads || leads.length === 0) {
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
+        <p className="text-slate-500">No leads available</p>
+      </div>
+    );
+  }
+
+  const analytics = calculateAnalyticsData(leads);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p className="text-slate-600 mt-2">
+          Overview of your lead qualification metrics
+        </p>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <KPIStatCard
+          label="Total Leads"
+          value={analytics.totalLeads}
+          icon={<Users size={32} />}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <KPIStatCard
+          label="Qualified Leads"
+          value={analytics.qualifiedLeads}
+          icon={<CheckCircle size={32} className="text-green-500" />}
+        />
+        <KPIStatCard
+          label="Disqualified Leads"
+          value={analytics.disqualifiedLeads}
+          icon={<XCircle size={32} className="text-red-500" />}
+        />
+        <KPIStatCard
+          label="Qualification Rate"
+          value={`${analytics.qualificationRate.toFixed(1)}%`}
+          icon={<TrendingUp size={32} className="text-blue-500" />}
+        />
+      </div>
+
+      {/* Secondary Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <KPIStatCard
+          label="Average Lead Score"
+          value={analytics.averageScore.toFixed(1)}
+          className="md:col-span-1"
+        />
+        <KPIStatCard
+          label="Low Priority Leads"
+          value={analytics.lowPriorityLeads}
+          className="md:col-span-1"
+        />
+        <KPIStatCard
+          label="Total Leads"
+          value={leads.length}
+          className="md:col-span-1"
+        />
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <VerdictChart
+          qualified={analytics.qualifiedLeads}
+          disqualified={analytics.disqualifiedLeads}
+          lowPriority={analytics.lowPriorityLeads}
+        />
+        <IndustryChart topIndustries={analytics.topIndustries} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TimeSeriesChart data={analytics.leadsByStatusOverTime} />
+        <BudgetChart scoreDistribution={analytics.scoreDistribution} />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,149 @@
+[
+  {
+    "icp_category": "Firmographic",
+    "attribute": "Industry",
+    "value": "SaaS, FinTech, MarTech, IT Services, Professional Services (B2B focused)",
+    "description": "Core industries where IT services demand is recurring and scalable",
+    "source_sheet": "ICP - Firmographic Criteria (Company Level)"
+  },
+  {
+    "icp_category": "Firmographic",
+    "attribute": "Employee Count",
+    "value": "50 - 500 (Mid-Market)",
+    "description": "Sufficient scale to require external specialized services",
+    "source_sheet": "ICP - Firmographic Criteria (Company Level)"
+  },
+  {
+    "icp_category": "Firmographic",
+    "attribute": "Annual Revenue",
+    "value": "$10M - $100M ARR",
+    "description": "Financial capacity for high-ticket service engagements",
+    "source_sheet": "ICP - Firmographic Criteria (Company Level)"
+  },
+  {
+    "icp_category": "Firmographic",
+    "attribute": "Geography",
+    "value": "USA, Canada, UK, Western Europe",
+    "description": "Target regions with high market maturity",
+    "source_sheet": "ICP - Firmographic Criteria (Company Level)"
+  },
+  {
+    "icp_category": "Firmographic",
+    "attribute": "Funding Stage",
+    "value": "Series B to Series D, or Profitable/Bootstrapped with high growth",
+    "description": "Indicates recent capital injection for expansion",
+    "source_sheet": "ICP - Firmographic Criteria (Company Level)"
+  },
+  {
+    "icp_category": "Buyer Persona",
+    "attribute": "Strategic Decision Maker",
+    "value": "CEO, COO, Founder, VP of Sales, Head of Revenue",
+    "description": "Final Approver / Budget Holder focused on high-level strategy",
+    "source_sheet": "ICP - Buyer Persona Criteria"
+  },
+  {
+    "icp_category": "Buyer Persona",
+    "attribute": "The Sales Leader",
+    "value": "VP Sales, Head of Sales, Sales Director",
+    "description": "Decision Maker / Champion focused on revenue targets and outbound performance",
+    "source_sheet": "ICP - Buyer Persona Criteria"
+  },
+  {
+    "icp_category": "Buyer Persona",
+    "attribute": "The Operations/Enablement Leader",
+    "value": "Head of Sales Ops, RevOps Manager, Sales Enablement Lead",
+    "description": "Influencer / Technical Evaluator focused on CRM and efficiency",
+    "source_sheet": "ICP - Buyer Persona Criteria"
+  },
+  {
+    "icp_category": "Disqualification",
+    "attribute": "Company Size",
+    "value": "Too Small",
+    "description": "Fewer than 10 total employees or solo founders with no sales team",
+    "source_sheet": "ICP - Disqualification Criteria (Negative ICP)"
+  },
+  {
+    "icp_category": "Disqualification",
+    "attribute": "Industry",
+    "value": "Restricted Industries",
+    "description": "Government, Non-Profit, or highly regulated industries with multi-year procurement cycles",
+    "source_sheet": "ICP - Disqualification Criteria (Negative ICP)"
+  },
+  {
+    "icp_category": "Disqualification",
+    "attribute": "Business Model",
+    "value": "B2C Only",
+    "description": "Companies that sell exclusively to individual consumers and do not have a B2B sales motion",
+    "source_sheet": "ICP - Disqualification Criteria (Negative ICP)"
+  },
+  {
+    "icp_category": "Disqualification",
+    "attribute": "Geography",
+    "value": "Non-Supported Regions",
+    "description": "Companies headquartered outside of North America and EMEA",
+    "source_sheet": "ICP - Disqualification Criteria (Negative ICP)"
+  },
+  {
+    "icp_category": "Pain Points",
+    "attribute": "Poor Outbound Efficiency",
+    "value": "High volume of outreach with very low response/conversion rates",
+    "description": "Results in wasted SDR time and high customer acquisition cost (CAC)",
+    "source_sheet": "ICP - Pain Points (Strong ICP Signals)"
+  },
+  {
+    "icp_category": "Pain Points",
+    "attribute": "Data Decay",
+    "value": "Sales team is working with outdated or inaccurate contact information",
+    "description": "Results in high bounce rates and wasted effort on unreachable leads",
+    "source_sheet": "ICP - Pain Points (Strong ICP Signals)"
+  },
+  {
+    "icp_category": "Pain Points",
+    "attribute": "Long Sales Cycles",
+    "value": "Deals are stalling in the pipeline due to lack of multi-threading",
+    "description": "Results in difficulty hitting quarterly revenue targets",
+    "source_sheet": "ICP - Pain Points (Strong ICP Signals)"
+  },
+  {
+    "icp_category": "Technographic",
+    "attribute": "CRM",
+    "value": "Salesforce, HubSpot",
+    "description": "Essential / Strong Fit for integration",
+    "source_sheet": "ICP - Technographic Criteria (Tech Stack Fit)"
+  },
+  {
+    "icp_category": "Technographic",
+    "attribute": "Sales Engagement",
+    "value": "Outreach, Salesloft, Apollo",
+    "description": "Strong Fit for process automation",
+    "source_sheet": "ICP - Technographic Criteria (Tech Stack Fit)"
+  },
+  {
+    "icp_category": "Technographic",
+    "attribute": "Data & Intelligence",
+    "value": "ZoomInfo, 6sense, Demandbase",
+    "description": "Complementary / High Interest tools",
+    "source_sheet": "ICP - Technographic Criteria (Tech Stack Fit)"
+  },
+  {
+    "icp_category": "Budget & Engagement",
+    "attribute": "Minimum Deal Size",
+    "value": "$15,000 / year",
+    "description": "Baseline financial threshold for engagement",
+    "source_sheet": "ICP - Budget & Engagement Criteria"
+  },
+  {
+    "icp_category": "Budget & Engagement",
+    "attribute": "Average Sales Cycle",
+    "value": "3 - 6 months",
+    "description": "Expected timeframe from lead to close",
+    "source_sheet": "ICP - Budget & Engagement Criteria"
+  },
+  {
+    "icp_category": "Budget & Engagement",
+    "attribute": "Trial Period",
+    "value": "14-day Proof of Concept (POC)",
+    "description": "Available for highly qualified leads",
+    "source_sheet": "ICP - Budget & Engagement Criteria"
+  }
+]

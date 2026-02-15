@@ -1,6 +1,8 @@
 {
   "name": "lead-score-board",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Production-ready lead qualification dashboard with n8n webhook integration",
+  "author": "LeadScore",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,9 +11,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.2.4",
+    "lucide-react": "^0.563.0",
+    "mongoose": "^9.2.1",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "recharts": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
