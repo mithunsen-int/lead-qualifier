@@ -2,17 +2,71 @@
 
 import { Lead } from "@/types/lead";
 import Link from "next/link";
+import { useState } from "react";
 import ScoreBadge from "./ScoreBadge";
 
 interface LeadTableProps {
   leads: Lead[];
   isLoading?: boolean;
+  onLeadUpdate?: (updatedLead: Lead) => void;
 }
 
 export default function LeadTable({
   leads,
   isLoading = false,
+  onLeadUpdate,
 }: LeadTableProps) {
+  const [reanalyzingIds, setReanalyzingIds] = useState<Set<string>>(new Set());
+  const [reanalysisErrors, setReanalysisErrors] = useState<Map<string, string>>(
+    new Map(),
+  );
+
+  const handleReanalyse = async (leadId: string | undefined) => {
+    if (!leadId) return;
+
+    setReanalyzingIds((prev) => new Set(prev).add(leadId));
+    setReanalysisErrors((prev) => {
+      const newMap = new Map(prev);
+      newMap.delete(leadId);
+      return newMap;
+    });
+
+    try {
+      const response = await fetch(`/api/leads/${leadId}/reanalyse`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `Reanalysis failed with status ${response.status}`,
+        );
+      }
+
+      const result = await response.json();
+      console.log(`[LeadTable] Reanalysis successful for lead ${leadId}`);
+
+      // Update the lead in the parent component
+      if (onLeadUpdate && result.data) {
+        onLeadUpdate(result.data);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to reanalyse lead";
+      console.error(`[LeadTable] Reanalysis error for ${leadId}:`, error);
+      setReanalysisErrors((prev) => new Map(prev).set(leadId, errorMessage));
+    } finally {
+      setReanalyzingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(leadId);
+        return newSet;
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-8 text-center">
@@ -53,7 +107,13 @@ export default function LeadTable({
               Lead Score
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+              Reanalysis Count
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
               Status
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+              Action
             </th>
           </tr>
         </thead>
@@ -81,6 +141,11 @@ export default function LeadTable({
                 <ScoreBadge score={lead.leadScore} />
               </td>
               <td className="px-6 py-4">
+                <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
+                  {lead.reanalysisCount || 0}
+                </span>
+              </td>
+              <td className="px-6 py-4">
                 {(() => {
                   const label =
                     lead.isQualified === true
@@ -104,6 +169,31 @@ export default function LeadTable({
                     </span>
                   );
                 })()}
+              </td>
+              <td className="px-6 py-4">
+                <button
+                  onClick={() => handleReanalyse(lead._id)}
+                  disabled={reanalyzingIds.has(lead._id || "")}
+                  className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                    reanalyzingIds.has(lead._id || "")
+                      ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                  title={
+                    reanalyzingIds.has(lead._id || "")
+                      ? "Reanalysis in progress..."
+                      : "Click to reanalyse this lead"
+                  }
+                >
+                  {reanalyzingIds.has(lead._id || "")
+                    ? "Analyzing..."
+                    : "Reanalyse"}
+                </button>
+                {reanalysisErrors.has(lead._id || "") && (
+                  <div className="mt-1 text-xs text-red-600">
+                    {reanalysisErrors.get(lead._id || "")}
+                  </div>
+                )}
               </td>
             </tr>
           ))}

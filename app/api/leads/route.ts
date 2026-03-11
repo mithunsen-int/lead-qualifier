@@ -104,12 +104,12 @@ export async function POST(request: NextRequest) {
       "leadInfo.leadEmail": body.leadInfo.leadEmail,
     });
 
-    if (existingLead) {
+    /* if (existingLead) {
       return NextResponse.json(
         { error: "Lead with this email already exists" },
         { status: 409 },
       );
-    }
+    } */
 
     // Create new lead
     const newLead = new LeadModel(body);

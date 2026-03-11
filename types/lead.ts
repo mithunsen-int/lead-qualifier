@@ -5,7 +5,7 @@ export type Status =
   | "pending";
 
 export interface LeadData {
-  success_criteria?: string[];
+  success_criteria?: string;
   lead_type?: string;
   primary_need?: string;
   proposed_solution?: string;
@@ -52,6 +52,7 @@ export interface Lead {
   leadScore: number;
   isQualified: boolean;
   leadInfo: LeadInfo;
+  reanalysisCount: number;
   createdAt?: string; // ISO format date
   updatedAt?: string; // ISO format date
 }

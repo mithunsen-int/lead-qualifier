@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
         opportunity_type: lead.leadInfo.opportunity_type || "",
         timeline: lead.leadInfo.timeline || "",
         leadData: lead.leadInfo.leadData || {
-          success_criteria: [],
+          success_criteria: "",
           lead_type: "",
           primary_need: "",
           proposed_solution: "",

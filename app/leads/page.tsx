@@ -84,6 +84,22 @@ export default function LeadsPage() {
     setLeads(filtered);
   };
 
+  const handleLeadUpdate = (updatedLead: Lead) => {
+    // Update the lead in the leads array
+    setLeads((prevLeads) =>
+      prevLeads.map((lead) =>
+        lead._id === updatedLead._id ? updatedLead : lead,
+      ),
+    );
+
+    // Update the lead in the allLeads array
+    setAllLeads((prevAllLeads) =>
+      prevAllLeads.map((lead) =>
+        lead._id === updatedLead._id ? updatedLead : lead,
+      ),
+    );
+  };
+
   if (error) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4">
@@ -114,7 +130,11 @@ export default function LeadsPage() {
         </p>
       </div>
 
-      <LeadTable leads={leads} isLoading={isLoading} />
+      <LeadTable
+        leads={leads}
+        isLoading={isLoading}
+        onLeadUpdate={handleLeadUpdate}
+      />
     </div>
   );
 }

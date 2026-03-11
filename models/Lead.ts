@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface ILeadData {
-  success_criteria?: string[];
+  success_criteria?: string;
   lead_type?: string;
   primary_need?: string;
   proposed_solution?: string;
@@ -47,13 +47,14 @@ export interface ILead extends Document {
   leadScore: number;
   isQualified: boolean;
   leadInfo: ILeadInfo;
+  reanalysisCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const leadDataSchema = new Schema<ILeadData>(
   {
-    success_criteria: [String],
+    success_criteria: String,
     lead_type: String,
     primary_need: String,
     proposed_solution: String,
@@ -152,6 +153,11 @@ const leadSchema = new Schema<ILead>(
     leadInfo: {
       type: leadInfoSchema,
       required: true,
+    },
+    reanalysisCount: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
   },
   {
