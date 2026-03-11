@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ICPCategory {
   _id: string;
@@ -44,6 +44,7 @@ export default function ICPTable() {
     icp_category: "",
     description: "",
   });
+  const enableAddEditCategories = false; // Set to true to enable category creation UI
 
   useEffect(() => {
     fetch("/api/icp/categories")
@@ -249,107 +250,114 @@ export default function ICPTable() {
     await refreshData();
   };
 
-  const rows = useMemo(() => data, [data]);
+  const rows = data;
 
   return (
     <div>
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-3 border rounded">
-          <h4 className="font-semibold mb-2">Create Category</h4>
-          <form onSubmit={handleCreateCategory} className="flex flex-col gap-2">
-            <input
-              className="border p-2"
-              placeholder="Title"
-              value={newCategoryTitle}
-              onChange={(e) => setNewCategoryTitle(e.target.value)}
-            />
-            <input
-              className="border p-2"
-              placeholder="Definition"
-              value={newCategoryDefinition}
-              onChange={(e) => setNewCategoryDefinition(e.target.value)}
-            />
-            <button
-              className="px-3 py-2 bg-blue-600 text-white rounded"
-              type="submit"
+      <div
+        className={`mb-4 grid grid-cols-1 ${enableAddEditCategories ? "md:grid-cols-2" : ""} gap-4`}
+      >
+        {enableAddEditCategories && (
+          <div className="p-3 border rounded">
+            <h4 className="font-semibold mb-2">Create Category</h4>
+            <form
+              onSubmit={handleCreateCategory}
+              className="flex flex-col gap-2"
             >
-              Create
-            </button>
-          </form>
+              <input
+                className="border p-2"
+                placeholder="Title"
+                value={newCategoryTitle}
+                onChange={(e) => setNewCategoryTitle(e.target.value)}
+              />
+              <input
+                className="border p-2"
+                placeholder="Definition"
+                value={newCategoryDefinition}
+                onChange={(e) => setNewCategoryDefinition(e.target.value)}
+              />
+              <button
+                className="px-3 py-2 bg-blue-600 text-white rounded"
+                type="submit"
+              >
+                Create
+              </button>
+            </form>
 
-          <div className="mt-4">
-            <h5 className="font-medium mb-2">Categories</h5>
-            <ul className="space-y-2">
-              {categories.map((c) => (
-                <li
-                  key={c._id}
-                  className="flex items-start justify-between gap-3"
-                >
-                  <div className="flex-1">
-                    {editingCategoryId === c._id ? (
-                      <div className="flex gap-2">
-                        <input
-                          className="border p-1"
-                          value={editingCategoryTitle}
-                          onChange={(e) =>
-                            setEditingCategoryTitle(e.target.value)
-                          }
-                        />
-                        <input
-                          className="border p-1"
-                          value={editingCategoryDefinition}
-                          onChange={(e) =>
-                            setEditingCategoryDefinition(e.target.value)
-                          }
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <div className="font-semibold">{c.title}</div>
-                        <div className="text-sm text-slate-600">
-                          {c.definition}
+            <div className={"mt-4"}>
+              <h5 className="font-medium mb-2">Categories</h5>
+              <ul className="space-y-2">
+                {categories.map((c) => (
+                  <li
+                    key={c._id}
+                    className="flex items-start justify-between gap-3"
+                  >
+                    <div className="flex-1">
+                      {editingCategoryId === c._id ? (
+                        <div className="flex gap-2">
+                          <input
+                            className="border p-1"
+                            value={editingCategoryTitle}
+                            onChange={(e) =>
+                              setEditingCategoryTitle(e.target.value)
+                            }
+                          />
+                          <input
+                            className="border p-1"
+                            value={editingCategoryDefinition}
+                            onChange={(e) =>
+                              setEditingCategoryDefinition(e.target.value)
+                            }
+                          />
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    {editingCategoryId === c._id ? (
-                      <>
-                        <button
-                          className="px-2 py-1 bg-green-600 text-white rounded"
-                          onClick={() => saveEditCategory(c._id)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="px-2 py-1 bg-gray-300 rounded"
-                          onClick={() => setEditingCategoryId(null)}
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="px-2 py-1 bg-blue-500 text-white rounded"
-                          onClick={() => startEditCategory(c)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="px-2 py-1 bg-red-500 text-white rounded"
-                          onClick={() => deleteCategory(c._id)}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                      ) : (
+                        <div>
+                          <div className="font-semibold">{c.title}</div>
+                          <div className="text-sm text-slate-600">
+                            {c.definition}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      {editingCategoryId === c._id ? (
+                        <>
+                          <button
+                            className="px-2 py-1 bg-green-600 text-white rounded"
+                            onClick={() => saveEditCategory(c._id)}
+                          >
+                            Save
+                          </button>
+                          <button
+                            className="px-2 py-1 bg-gray-300 rounded"
+                            onClick={() => setEditingCategoryId(null)}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                            onClick={() => startEditCategory(c)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="px-2 py-1 bg-red-500 text-white rounded"
+                            onClick={() => deleteCategory(c._id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="p-3 border rounded">
           <h4 className="font-semibold mb-2">Create ICP Data</h4>
