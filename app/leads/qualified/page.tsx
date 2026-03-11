@@ -15,14 +15,21 @@ export default function QualifiedLeadsPage() {
     const fetchLeads = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/leads?isQualified=true");
+        // Fetch both SQL and MQL leads (qualified)
+        const sqlResponse = await fetch(
+          "/api/leads?status=Sales Qualified Lead (SQL)",
+        );
+        const mqlResponse = await fetch(
+          "/api/leads?status=Marketing Qualified Lead (MQL)",
+        );
 
-        if (!response.ok) {
+        if (!sqlResponse.ok || !mqlResponse.ok) {
           throw new Error("Failed to fetch leads");
         }
 
-        const data: LeadsResponse = await response.json();
-        setLeads(data.leads);
+        const sqlData: LeadsResponse = await sqlResponse.json();
+        const mqlData: LeadsResponse = await mqlResponse.json();
+        setLeads([...sqlData.leads, ...mqlData.leads]);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch leads");

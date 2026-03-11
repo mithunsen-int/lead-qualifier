@@ -3,10 +3,6 @@ import LeadModel from "@/models/Lead";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-// In-memory cache to prevent duplicate reanalysis calls
-const reanalysisInProgress = new Map<string, boolean>();
-const REANALYSIS_TIMEOUT = 5000; // 5 seconds
-
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -24,23 +20,12 @@ export async function POST(
       );
     }
 
-    // Prevent duplicate reanalysis calls
-    if (reanalysisInProgress.get(id)) {
-      return NextResponse.json(
-        { error: "Reanalysis already in progress for this lead" },
-        { status: 409 },
-      );
-    }
-
     // Fetch the lead
     const lead = await LeadModel.findById(id);
 
     if (!lead) {
       return NextResponse.json({ error: "Lead not found" }, { status: 404 });
     }
-
-    // Mark as in progress
-    reanalysisInProgress.set(id, true);
 
     try {
       // Log the reanalysis request
@@ -53,21 +38,15 @@ export async function POST(
 
       // Call external API for reanalysis
       // You can configure the external API endpoint via environment variables
-      const externalApiUrl =
-        process.env.LEAD_REANALYSIS_API_URL ||
-        "https://api.example.com/reanalyse";
+      const externalApiUrl = `${process.env.N8N_WEBHOOK_URL}/webhook-test/reanalysis-lead`;
 
       const externalApiResponse = await fetch(externalApiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.LEAD_REANALYSIS_API_KEY || ""}`,
         },
         body: JSON.stringify({
-          leadId: id,
-          leadInfo: lead.leadInfo,
-          leadScore: lead.leadScore,
-          timestamp: new Date().toISOString(),
+          lead,
         }),
       });
 
@@ -94,50 +73,12 @@ export async function POST(
         }
       }
 
-      // Increment reanalysisCount
-      lead.reanalysisCount = (lead.reanalysisCount || 0) + 1;
-
-      // Optionally update lead data with external API results
-      // This depends on what the external API returns
-      if (externalAnalysisData && typeof externalAnalysisData === "object") {
-        const analysisData = externalAnalysisData as Record<string, unknown>;
-        if (analysisData.budgetScore)
-          lead.budgetScore = analysisData.budgetScore;
-        if (analysisData.authorityScore)
-          lead.authorityScore = analysisData.authorityScore;
-        if (analysisData.needScore) lead.needScore = analysisData.needScore;
-        if (analysisData.timelineScore)
-          lead.timelineScore = analysisData.timelineScore;
-        if (analysisData.leadScore) lead.leadScore = analysisData.leadScore;
-        if (analysisData.isQualified !== undefined)
-          lead.isQualified = analysisData.isQualified;
-        if (analysisData.status) lead.status = analysisData.status;
-        if (analysisData.overallAssessment)
-          lead.overallAssessment = analysisData.overallAssessment;
-        if (analysisData.qualificationReason)
-          lead.qualificationReason = analysisData.qualificationReason;
-        if (analysisData.disQualificationReason)
-          lead.disQualificationReason = analysisData.disQualificationReason;
-      }
-
-      // Save the updated lead
-      const updatedLead = await lead.save();
-
-      console.log(
-        `[Reanalysis] Reanalysis completed for lead ${id}. New reanalysisCount: ${updatedLead.reanalysisCount}`,
-      );
-
       return NextResponse.json({
         success: true,
-        message: "Lead reanalysed successfully",
-        data: updatedLead,
-        reanalysisCount: updatedLead.reanalysisCount,
+        message: "Lead sent for reanalysis successfully",
+        data: lead,
       });
     } finally {
-      // Clear the in-progress flag after a timeout
-      setTimeout(() => {
-        reanalysisInProgress.delete(id);
-      }, REANALYSIS_TIMEOUT);
     }
   } catch (error) {
     console.error("[Reanalysis] Error:", error);

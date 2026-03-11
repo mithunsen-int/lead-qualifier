@@ -14,10 +14,14 @@ export default function FilterBar({ onFilterChange }: FilterBarProps) {
   const [scoreMax, setScoreMax] = useState("");
 
   const applyFilters = () => {
-    // Map Qualified/Disqualified to isQualified boolean when possible
+    // Map status to isQualified boolean when possible
     let isQualified: boolean | undefined = undefined;
-    if (status === "Qualified") isQualified = true;
-    else if (status === "Disqualified") isQualified = false;
+    if (
+      status === "Sales Qualified Lead (SQL)" ||
+      status === "Marketing Qualified Lead (MQL)"
+    )
+      isQualified = true;
+    else if (status === "Disqualified Lead") isQualified = false;
 
     onFilterChange?.({
       search,
@@ -81,10 +85,14 @@ export default function FilterBar({ onFilterChange }: FilterBarProps) {
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Status</option>
-            <option value="Qualified">Qualified</option>
-            <option value="Disqualified">Disqualified</option>
-            <option value="Low Priority Lead">Low Priority</option>
-            <option value="pending">Pending</option>
+            <option value="Sales Qualified Lead (SQL)">
+              Sales Qualified Lead (SQL)
+            </option>
+            <option value="Marketing Qualified Lead (MQL)">
+              Marketing Qualified Lead (MQL)
+            </option>
+            <option value="Disqualified Lead">Disqualified Lead</option>
+            <option value="Low Priority Lead">Low Priority Lead</option>
           </select>
         </div>
 

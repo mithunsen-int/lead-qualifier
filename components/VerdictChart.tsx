@@ -10,23 +10,31 @@ import {
 } from "recharts";
 
 interface VerdictChartProps {
-  qualified: number;
+  sql?: number;
+  mql?: number;
+  qualified?: number;
   disqualified: number;
   lowPriority: number;
 }
 
-const COLORS = ["#16a34a", "#dc2626", "#f59e0b"];
+const COLORS = ["#16a34a", "#2563eb", "#dc2626", "#f59e0b"];
 
 export default function VerdictChart({
-  qualified,
+  sql = 0,
+  mql = 0,
+  qualified = 0,
   disqualified,
   lowPriority,
 }: VerdictChartProps) {
+  // Support both old and new API
+  const sqlCount = sql > 0 ? sql : qualified;
+
   const data = [
-    { name: "Qualified", value: qualified },
+    { name: "SQL", value: sqlCount },
+    { name: "MQL", value: mql },
     { name: "Disqualified", value: disqualified },
     { name: "Low Priority", value: lowPriority },
-  ];
+  ].filter((item) => item.value > 0);
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">

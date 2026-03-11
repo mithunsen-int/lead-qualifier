@@ -50,14 +50,22 @@ export default function LeadsPage() {
       );
     }
 
-    // If isQualified is provided, it takes precedence
+    // If isQualified is provided, map it to new status values
     if (
       Object.prototype.hasOwnProperty.call(newFilters, "isQualified") &&
-      typeof newFilters.isQualified === "boolean"
+      newFilters.isQualified !== undefined
     ) {
-      filtered = filtered.filter(
-        (lead) => lead.isQualified === newFilters.isQualified,
-      );
+      if (newFilters.isQualified === true) {
+        filtered = filtered.filter(
+          (lead) =>
+            lead.status === "Sales Qualified Lead (SQL)" ||
+            lead.status === "Marketing Qualified Lead (MQL)",
+        );
+      } else if (newFilters.isQualified === false) {
+        filtered = filtered.filter(
+          (lead) => lead.status === "Disqualified Lead",
+        );
+      }
     } else if (newFilters.status && newFilters.status !== "all") {
       filtered = filtered.filter((lead) => lead.status === newFilters.status);
     }

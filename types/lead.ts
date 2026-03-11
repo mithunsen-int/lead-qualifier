@@ -1,8 +1,8 @@
 export type Status =
-  | "Qualified"
-  | "Disqualified"
-  | "Low Priority Lead"
-  | "pending";
+  | "Sales Qualified Lead (SQL)"
+  | "Marketing Qualified Lead (MQL)"
+  | "Disqualified Lead"
+  | "Low Priority Lead";
 
 export interface LeadData {
   success_criteria?: string;
@@ -50,7 +50,7 @@ export interface Lead {
   finalStatus: string;
   status: Status;
   leadScore: number;
-  isQualified: boolean;
+  isQualified: boolean | null;
   leadInfo: LeadInfo;
   reanalysisCount: number;
   createdAt?: string; // ISO format date
@@ -62,7 +62,8 @@ export interface LeadsResponse {
   leads: Lead[];
   stats?: {
     total: number;
-    qualified: number;
+    sql: number;
+    mql: number;
     disqualified: number;
     lowPriority: number;
     averageScore: number;
@@ -71,7 +72,8 @@ export interface LeadsResponse {
 
 export interface AnalyticsData {
   totalLeads: number;
-  qualifiedLeads: number;
+  sqlLeads: number;
+  mqlLeads: number;
   disqualifiedLeads: number;
   lowPriorityLeads: number;
   qualificationRate: number;
@@ -94,4 +96,5 @@ export interface FilterOptions {
   dateFrom?: string;
   dateTo?: string;
   search?: string;
+  isQualified?: boolean | null;
 }

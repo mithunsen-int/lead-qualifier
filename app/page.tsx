@@ -74,8 +74,8 @@ export default async function DashboardPage() {
           icon={<Users size={32} />}
         />
         <KPIStatCard
-          label="Qualified Leads"
-          value={analytics.qualifiedLeads}
+          label="SQL Leads"
+          value={analytics.sqlLeads}
           icon={<CheckCircle size={32} className="text-green-500" />}
         />
         <KPIStatCard
@@ -93,8 +93,8 @@ export default async function DashboardPage() {
       {/* Secondary Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <KPIStatCard
-          label="Average Lead Score"
-          value={analytics.averageScore.toFixed(1)}
+          label="MQL Leads"
+          value={analytics.mqlLeads}
           className="md:col-span-1"
         />
         <KPIStatCard
@@ -103,8 +103,8 @@ export default async function DashboardPage() {
           className="md:col-span-1"
         />
         <KPIStatCard
-          label="Total Leads"
-          value={leads.length}
+          label="Average Lead Score"
+          value={analytics.averageScore.toFixed(1)}
           className="md:col-span-1"
         />
       </div>
@@ -112,7 +112,8 @@ export default async function DashboardPage() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <VerdictChart
-          qualified={analytics.qualifiedLeads}
+          sql={analytics.sqlLeads}
+          mql={analytics.mqlLeads}
           disqualified={analytics.disqualifiedLeads}
           lowPriority={analytics.lowPriorityLeads}
         />

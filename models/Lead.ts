@@ -43,7 +43,11 @@ export interface ILead extends Document {
   disQualificationReason?: string;
   recommendedAction?: string;
   finalStatus: string;
-  status: "Qualified" | "Disqualified" | "Low Priority Lead" | "pending";
+  status:
+    | "Sales Qualified Lead (SQL)"
+    | "Marketing Qualified Lead (MQL)"
+    | "Disqualified Lead"
+    | "Low Priority Lead";
   leadScore: number;
   isQualified: boolean;
   leadInfo: ILeadInfo;
@@ -132,9 +136,14 @@ const leadSchema = new Schema<ILead>(
     },
     status: {
       type: String,
-      enum: ["Qualified", "Disqualified", "Low Priority Lead", "pending"],
+      enum: [
+        "Sales Qualified Lead (SQL)",
+        "Marketing Qualified Lead (MQL)",
+        "Disqualified Lead",
+        "Low Priority Lead",
+      ],
       required: true,
-      default: "pending",
+      default: "Low Priority Lead",
       index: true,
     },
     leadScore: {

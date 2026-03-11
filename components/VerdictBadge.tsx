@@ -3,7 +3,11 @@
 import { getVerdictColor } from "@/lib/analytics";
 
 interface VerdictBadgeProps {
-  verdict: "Qualified" | "Disqualified" | "Nurture";
+  verdict:
+    | "Sales Qualified Lead (SQL)"
+    | "Marketing Qualified Lead (MQL)"
+    | "Disqualified Lead"
+    | "Low Priority Lead";
   className?: string;
 }
 

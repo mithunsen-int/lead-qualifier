@@ -50,8 +50,13 @@ export async function GET(request: NextRequest) {
 
     const stats = {
       total: leads.length,
-      qualified: leads.filter((l) => l.isQualified === true).length,
-      disqualified: leads.filter((l) => l.isQualified === false).length,
+      sql: leads.filter((l) => l.status === "Sales Qualified Lead (SQL)")
+        .length,
+      mql: leads.filter((l) => l.status === "Marketing Qualified Lead (MQL)")
+        .length,
+      disqualified: leads.filter((l) => l.status === "Disqualified Lead")
+        .length,
+      lowPriority: leads.filter((l) => l.status === "Low Priority Lead").length,
       averageScore:
         leads.length > 0
           ? leads.reduce((sum, l) => sum + l.leadScore, 0) / leads.length
@@ -104,12 +109,25 @@ export async function POST(request: NextRequest) {
       "leadInfo.leadEmail": body.leadInfo.leadEmail,
     });
 
-    /* if (existingLead) {
-      return NextResponse.json(
+    if (existingLead) {
+      /* return NextResponse.json(
         { error: "Lead with this email already exists" },
         { status: 409 },
+      ); */
+      // Modified by me //
+      /* const updatedLead = await LeadModel.findByIdAndUpdate(
+        existingLead._id,
+        body,
+        {
+          new: true,
+          runValidators: true,
+        },
       );
-    } */
+
+      if (!updatedLead) {
+        return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+      } */
+    }
 
     // Create new lead
     const newLead = new LeadModel(body);

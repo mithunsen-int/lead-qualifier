@@ -211,25 +211,31 @@ export default function LeadDetail({
         <div className="flex items-center gap-3">
           <ScoreBadge score={lead.leadScore} />
           {(() => {
-            const label =
-              lead.isQualified === true
-                ? "Qualified"
-                : lead.isQualified === false
-                  ? "Disqualified"
-                  : lead.status;
+            const getStatusLabel = () => {
+              if (lead.status) return lead.status;
+              if (lead.isQualified === true)
+                return "Sales Qualified Lead (SQL)";
+              if (lead.isQualified === false) return "Disqualified Lead";
+              return "Low Priority Lead";
+            };
 
-            const colorClass =
-              lead.isQualified === true
-                ? "bg-green-100 text-green-800"
-                : lead.isQualified === false
-                  ? "bg-red-100 text-red-800"
-                  : "bg-yellow-100 text-yellow-800";
+            const getColorClass = () => {
+              if (lead.status === "Sales Qualified Lead (SQL)")
+                return "bg-green-100 text-green-800";
+              if (lead.status === "Marketing Qualified Lead (MQL)")
+                return "bg-blue-100 text-blue-800";
+              if (lead.status === "Disqualified Lead")
+                return "bg-red-100 text-red-800";
+              if (lead.status === "Low Priority Lead")
+                return "bg-yellow-100 text-yellow-800";
+              return "bg-gray-100 text-gray-800";
+            };
 
             return (
               <span
-                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getColorClass()}`}
               >
-                {label}
+                {getStatusLabel()}
               </span>
             );
           })()}

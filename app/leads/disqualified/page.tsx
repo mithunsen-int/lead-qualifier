@@ -15,7 +15,7 @@ export default function DisqualifiedLeadsPage() {
     const fetchLeads = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/leads?isQualified=false");
+        const response = await fetch("/api/leads?status=Disqualified Lead");
 
         if (!response.ok) {
           throw new Error("Failed to fetch leads");

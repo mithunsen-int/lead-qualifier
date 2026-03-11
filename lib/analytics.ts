@@ -2,8 +2,15 @@ import { AnalyticsData, Lead } from "@/types/lead";
 
 export function calculateAnalyticsData(leads: Lead[]): AnalyticsData {
   const totalLeads = leads.length;
-  const qualifiedLeads = leads.filter((l) => l.isQualified === true).length;
-  const disqualifiedLeads = leads.filter((l) => l.isQualified === false).length;
+  const sqlLeads = leads.filter(
+    (l) => l.status === "Sales Qualified Lead (SQL)",
+  ).length;
+  const mqlLeads = leads.filter(
+    (l) => l.status === "Marketing Qualified Lead (MQL)",
+  ).length;
+  const disqualifiedLeads = leads.filter(
+    (l) => l.status === "Disqualified Lead",
+  ).length;
   const lowPriorityLeads = leads.filter(
     (l) => l.status === "Low Priority Lead",
   ).length;
@@ -81,12 +88,13 @@ export function calculateAnalyticsData(leads: Lead[]): AnalyticsData {
 
   return {
     totalLeads,
-    qualifiedLeads,
+    sqlLeads,
+    mqlLeads,
     disqualifiedLeads,
     lowPriorityLeads,
     qualificationRate:
       totalLeads > 0
-        ? parseFloat(((qualifiedLeads / totalLeads) * 100).toFixed(2))
+        ? parseFloat((((sqlLeads + mqlLeads) / totalLeads) * 100).toFixed(2))
         : 0,
     averageScore,
     leadsByIndustry,
@@ -118,9 +126,11 @@ export function getScoreColor(score: number): string {
 
 export function getStatusColor(status: string): string {
   switch (status) {
-    case "Qualified":
+    case "Sales Qualified Lead (SQL)":
       return "bg-green-100 text-green-800";
-    case "Disqualified":
+    case "Marketing Qualified Lead (MQL)":
+      return "bg-blue-100 text-blue-800";
+    case "Disqualified Lead":
       return "bg-red-100 text-red-800";
     case "Low Priority Lead":
       return "bg-yellow-100 text-yellow-800";
@@ -131,9 +141,11 @@ export function getStatusColor(status: string): string {
 
 export function getStatusBgColor(status: string): string {
   switch (status) {
-    case "Qualified":
+    case "Sales Qualified Lead (SQL)":
       return "bg-green-50";
-    case "Disqualified":
+    case "Marketing Qualified Lead (MQL)":
+      return "bg-blue-50";
+    case "Disqualified Lead":
       return "bg-red-50";
     case "Low Priority Lead":
       return "bg-yellow-50";
@@ -144,11 +156,12 @@ export function getStatusBgColor(status: string): string {
 
 export function getVerdictColor(verdict: string): string {
   switch (verdict) {
-    case "Qualified":
+    case "Sales Qualified Lead (SQL)":
       return "bg-green-100 text-green-800";
-    case "Disqualified":
+    case "Marketing Qualified Lead (MQL)":
+      return "bg-blue-100 text-blue-800";
+    case "Disqualified Lead":
       return "bg-red-100 text-red-800";
-    case "Nurture":
     case "Low Priority Lead":
       return "bg-yellow-100 text-yellow-800";
     default:
