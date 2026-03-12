@@ -89,28 +89,16 @@ export default function LeadTable({
         <thead className="bg-slate-50 border-b border-slate-200">
           <tr>
             <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Lead Name
+              Lead
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Company
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Job Title
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Location
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Email
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Lead Score
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
-              Reanalysis Count
+              Score
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
               Status
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+              Reanalyzed
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
               Action
@@ -120,30 +108,24 @@ export default function LeadTable({
         <tbody className="divide-y divide-slate-200">
           {leads.map((lead) => (
             <tr key={lead._id} className="hover:bg-slate-50 transition-colors">
-              <td className="px-6 py-4 text-sm font-medium text-slate-900">
+              <td className="px-6 py-4">
                 <Link href={`/leads/${lead._id}`} className="hover:underline">
-                  {lead.leadInfo.leadName}
+                  <div className="text-sm font-medium text-slate-900">
+                    {lead.leadInfo.leadName}
+                  </div>
+                  <div className="text-xs text-slate-600">
+                    {lead.leadInfo.companyName}
+                    {lead.leadInfo.jobTitle
+                      ? ` • ${lead.leadInfo.jobTitle}`
+                      : ""}
+                  </div>
+                  <div className="text-xs text-slate-600">
+                    {lead.leadInfo.leadEmail}
+                  </div>
                 </Link>
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-600">
-                {lead.leadInfo.companyName}
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-600">
-                {lead.leadInfo.jobTitle}
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-600">
-                {lead.leadInfo.location || "N/A"}
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-600">
-                {lead.leadInfo.leadEmail}
               </td>
               <td className="px-6 py-4">
                 <ScoreBadge score={lead.leadScore} />
-              </td>
-              <td className="px-6 py-4">
-                <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
-                  {lead.leadInfo.reanalysisCount || 0}
-                </span>
               </td>
               <td className="px-6 py-4">
                 {(() => {
@@ -154,7 +136,6 @@ export default function LeadTable({
                     if (lead.isQualified === false) return "Disqualified Lead";
                     return "Low Priority Lead";
                   };
-
                   const getColorClass = () => {
                     if (lead.status === "Sales Qualified Lead (SQL)")
                       return "bg-green-100 text-green-800";
@@ -166,7 +147,6 @@ export default function LeadTable({
                       return "bg-yellow-100 text-yellow-800";
                     return "bg-gray-100 text-gray-800";
                   };
-
                   return (
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getColorClass()}`}
@@ -175,6 +155,12 @@ export default function LeadTable({
                     </span>
                   );
                 })()}
+              </td>
+              <td className="px-6 py-4">
+                <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
+                  {(lead as Lead & { reanalysisCount?: number })
+                    .reanalysisCount || 0}
+                </span>
               </td>
               <td className="px-6 py-4">
                 <button

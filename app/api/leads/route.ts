@@ -13,10 +13,14 @@ export async function GET(request: NextRequest) {
     const scoreMax = searchParams.get("scoreMax");
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
+    const status = searchParams.get("status");
 
     const query: Record<
       string,
-      boolean | { $gte?: number; $lte?: number } | { $gte?: Date; $lte?: Date }
+      | string
+      | boolean
+      | { $gte?: number; $lte?: number }
+      | { $gte?: Date; $lte?: Date }
     > = {};
 
     // Filter by isQualified boolean
@@ -44,6 +48,11 @@ export async function GET(request: NextRequest) {
       if (dateTo) {
         query.createdAt.$lte = new Date(dateTo);
       }
+    }
+
+    // Filter by status
+    if (status && status !== "") {
+      query.status = status;
     }
 
     const leads = await LeadModel.find(query).sort({ createdAt: -1 }).exec();
