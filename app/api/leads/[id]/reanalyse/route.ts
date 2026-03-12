@@ -38,7 +38,7 @@ export async function POST(
 
       // Call external API for reanalysis
       // You can configure the external API endpoint via environment variables
-      const externalApiUrl = `${process.env.N8N_WEBHOOK_URL}/webhook-test/reanalysis-lead`;
+      const externalApiUrl = `${process.env.N8N_WEBHOOK_URL}/webhook/reanalysis-lead`;
 
       const externalApiResponse = await fetch(externalApiUrl, {
         method: "POST",

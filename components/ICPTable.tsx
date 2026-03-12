@@ -129,12 +129,21 @@ export default function ICPTable() {
   const handleCreateData = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newData.icp_category || !newData.attribute) return;
-    await fetch("/api/icp/data", {
+    const rawRes = await fetch("/api/icp/data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newData),
     });
     setNewData({ icp_category: "", attribute: "", value: "", description: "" });
+    const icpDataObj = await rawRes.json();
+    await fetch("api/icp/sync-to-vdb", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "create",
+        id: icpDataObj.data._id,
+      }),
+    });
     await refreshData();
   };
 
@@ -157,6 +166,14 @@ export default function ICPTable() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editingDataValues),
     });
+    await fetch("api/icp/sync-to-vdb", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "update",
+        id: id,
+      }),
+    });
     setEditingDataId(null);
     setEditingDataValues(null);
     await refreshData();
@@ -164,6 +181,14 @@ export default function ICPTable() {
 
   const deleteData = async (id: string) => {
     if (!confirm("Delete this ICP data item?")) return;
+    await fetch("api/icp/sync-to-vdb", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "delete",
+        id: id,
+      }),
+    });
     await fetch(`/api/icp/data/${id}`, { method: "DELETE" });
     await refreshData();
   };
