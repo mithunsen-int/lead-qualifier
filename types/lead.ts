@@ -31,6 +31,7 @@ export interface LeadInfo {
   leadData?: LeadData;
   receiverEmail?: string;
   receiverName?: string;
+  reanalysisCount: number;
 }
 
 export interface Lead {
@@ -52,7 +53,6 @@ export interface Lead {
   leadScore: number;
   isQualified: boolean | null;
   leadInfo: LeadInfo;
-  reanalysisCount: number;
   createdAt?: string; // ISO format date
   updatedAt?: string; // ISO format date
 }

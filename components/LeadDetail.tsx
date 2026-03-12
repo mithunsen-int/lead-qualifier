@@ -261,11 +261,13 @@ export default function LeadDetail({
             <div>
               <p className="text-sm font-semibold text-blue-900">
                 Reanalysis Count:{" "}
-                <span className="text-lg">{lead.reanalysisCount || 0}</span>
+                <span className="text-lg">
+                  {lead.leadInfo.reanalysisCount || 0}
+                </span>
               </p>
               <p className="text-xs text-blue-700 mt-1">
-                This lead has been reanalysed {lead.reanalysisCount || 0}{" "}
-                time(s)
+                This lead has been reanalysed{" "}
+                {lead.leadInfo.reanalysisCount || 0} time(s)
               </p>
             </div>
             <button

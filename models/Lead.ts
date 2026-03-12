@@ -27,6 +27,7 @@ export interface ILeadInfo {
   leadData?: ILeadData;
   receiverEmail?: string;
   receiverName?: string;
+  reanalysisCount: number;
 }
 
 export interface ILead extends Document {
@@ -51,7 +52,6 @@ export interface ILead extends Document {
   leadScore: number;
   isQualified: boolean;
   leadInfo: ILeadInfo;
-  reanalysisCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -87,6 +87,11 @@ const leadInfoSchema = new Schema<ILeadInfo>(
     leadData: leadDataSchema,
     receiverEmail: String,
     receiverName: String,
+    reanalysisCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { _id: false },
 );
@@ -163,11 +168,6 @@ const leadSchema = new Schema<ILead>(
       type: leadInfoSchema,
       required: true,
     },
-    reanalysisCount: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
   },
   {
     timestamps: true,
@@ -177,7 +177,7 @@ const leadSchema = new Schema<ILead>(
 // Compound index for common filtering queries
 leadSchema.index({ status: 1, createdAt: -1 });
 leadSchema.index({ leadScore: -1, createdAt: -1 });
-leadSchema.index({ "leadInfo.leadEmail": 1 }, { unique: true });
+leadSchema.index({ "leadInfo.leadEmail": 1 }); // Non-unique index for faster queries
 
 // Prevent model recompilation in Next.js dev mode
 const Lead = mongoose.models.Lead || mongoose.model<ILead>("Lead", leadSchema);

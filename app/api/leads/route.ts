@@ -105,18 +105,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for duplicate email
-    const existingLead = await LeadModel.findOne({
+    /* const existingLead = await LeadModel.findOne({
       "leadInfo.leadEmail": body.leadInfo.leadEmail,
     });
 
     if (existingLead) {
-      /* return NextResponse.json(
+      return NextResponse.json(
         { error: "Lead with this email already exists" },
         { status: 409 },
-      ); */
-      // Modified by me //
-      /* const updatedLead = await LeadModel.findByIdAndUpdate(
-        existingLead._id,
+      );
+    } */
+
+    console.log("Creating lead with data:", body);
+    if (body?.leadInfo?.editId) {
+      const updatedLead = await LeadModel.findByIdAndUpdate(
+        body.leadInfo.editId,
         body,
         {
           new: true,
@@ -126,7 +129,16 @@ export async function POST(request: NextRequest) {
 
       if (!updatedLead) {
         return NextResponse.json({ error: "Lead not found" }, { status: 404 });
-      } */
+      }
+
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Lead updated successfully",
+          data: updatedLead,
+        },
+        { status: 200 },
+      );
     }
 
     // Create new lead

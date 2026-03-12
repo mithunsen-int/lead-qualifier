@@ -142,7 +142,7 @@ export default function LeadTable({
               </td>
               <td className="px-6 py-4">
                 <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
-                  {lead.reanalysisCount || 0}
+                  {lead.leadInfo.reanalysisCount || 0}
                 </span>
               </td>
               <td className="px-6 py-4">
